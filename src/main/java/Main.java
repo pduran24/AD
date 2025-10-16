@@ -1,3 +1,4 @@
+import dao.VideojuegoDAO;
 import database.DataProvider;
 
 public class Main {
@@ -9,6 +10,10 @@ public class Main {
                 System.getenv("MYSQL_PASSWORD")
         );
 
+
+        VideojuegoDAO videojuegoDAO = new VideojuegoDAO(ds);
+
+        System.out.println(videojuegoDAO.findById(1));
 
 
 

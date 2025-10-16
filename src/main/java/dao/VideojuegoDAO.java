@@ -1,19 +1,18 @@
 package dao;
 
+import models.Videojuego;
+
 import javax.sql.DataSource;
-import java.sql.Connection;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
 
-public class VidejuegoDAO implements DAO<Videojuego> {
+public class VideojuegoDAO implements DAO<Videojuego> {
 
     private DataSource ds;
-    public VidejuegoDAO(DataSource dataSource) {
+    public VideojuegoDAO(DataSource dataSource) {
         this.ds = dataSource;
     }
 
@@ -35,35 +34,32 @@ public class VidejuegoDAO implements DAO<Videojuego> {
 
     @Override
     public List<Videojuego> findAll() {
-        try (Connection connection = ds.getConnection()){
+        return null;
+    }
+
+    @Override
+    public Optional<Videojuego> findById(Integer id) {
+
+        try (Connection connection = ds.getConnection()) {
+            Videojuego videojuego = new Videojuego();
             Statement stmt = connection.createStatement();
-            ResultSet rs = stmt.executeQuery("SELECT * FROM videojuegos");
+            ResultSet rs = stmt.executeQuery("SELECT * FROM videojuegos WHERE id = " + id);
 
-            ArrayList<Videojuego> listado = new ArrayList<>();
+            if (rs.next()) {
 
-            while (rs.next()) {
-                Videojuego videojuego = new Videojuego();
                 videojuego.setId(rs.getInt("id"));
                 videojuego.setNombre(rs.getString("nombre"));
                 videojuego.setDesarrollador(rs.getString("desarrollador"));
                 videojuego.setAnio(rs.getInt("anio_lanzamiento"));
                 videojuego.setGenero(rs.getString("genero"));
                 videojuego.setPlataforma(rs.getString("plataforma"));
-                listado.add(videojuego);
             }
 
-
-
-            return listado;
+            return Optional.of(videojuego);
 
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
-    }
-
-    @Override
-    public Optional<Videojuego> findById(Integer id) {
-        return Optional.empty();
     }
 
 
