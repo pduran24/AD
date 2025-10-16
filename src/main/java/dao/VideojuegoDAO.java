@@ -34,7 +34,30 @@ public class VideojuegoDAO implements DAO<Videojuego> {
 
     @Override
     public List<Videojuego> findAll() {
-        return null;
+        try (Connection connection = ds.getConnection()){
+            Statement stmt = connection.createStatement();
+            ResultSet rs = stmt.executeQuery("SELECT * FROM videojuegos");
+
+            ArrayList<Videojuego> listado = new ArrayList<>();
+
+            while (rs.next()) {
+                Videojuego videojuego = new Videojuego();
+                videojuego.setId(rs.getInt("id"));
+                videojuego.setNombre(rs.getString("nombre"));
+                videojuego.setDesarrollador(rs.getString("desarrollador"));
+                videojuego.setAnio(rs.getInt("anio_lanzamiento"));
+                videojuego.setGenero(rs.getString("genero"));
+                videojuego.setPlataforma(rs.getString("plataforma"));
+                listado.add(videojuego);
+            }
+
+
+
+            return listado;
+
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     @Override
