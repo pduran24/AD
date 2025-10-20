@@ -1,5 +1,6 @@
 import dao.VideojuegoDAO;
 import database.DataProvider;
+import models.Videojuego;
 
 public class Main {
     public static void main(String[] args) {
@@ -18,7 +19,12 @@ public class Main {
 
 
 
-
-
+        var juego = videojuegoDAO.findById(4);
+        if (juego.isPresent()) {
+            System.out.println(juego);
+            videojuegoDAO.delete(juego.get());
+        } else  {
+            System.out.println("No existe el videojuego");
+        }
     }
 }

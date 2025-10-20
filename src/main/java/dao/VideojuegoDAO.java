@@ -51,8 +51,20 @@ public class VideojuegoDAO implements DAO<Videojuego> {
     public Optional<Videojuego> update(Videojuego videojuego) {
         try (Connection connection = ds.getConnection()) {
 
-            String sql = "UPDATE ? FROM  videojuegos WHERE id = ?";
+            String sql = "UPDATE videojuegos SET nombre = ?, desarrollador = ?, anio_lanzamiento = ?, genero = ?, plataforma = ?  WHERE id = ?";
 
+            PreparedStatement stmt = connection.prepareStatement(sql);
+            stmt.setString(1, videojuego.getNombre());
+            stmt.setString(2, videojuego.getDesarrollador());
+            stmt.setInt(3,videojuego.getAnio());
+            stmt.setString(4, videojuego.getGenero());
+            stmt.setString(5, videojuego.getPlataforma());
+            stmt.setInt(6, videojuego.getId());
+
+            int filasUpdateadas = stmt.executeUpdate();
+            if (filasUpdateadas > 0) {
+                return Optional.of(videojuego);
+            }
 
         } catch (SQLException e) {
             throw new RuntimeException(e);
