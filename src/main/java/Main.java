@@ -13,7 +13,8 @@ public class Main {
 
         VideojuegoDAO videojuegoDAO = new VideojuegoDAO(ds);
 
-        System.out.println(videojuegoDAO.findById(1));
+        videojuegoDAO.findById(3).ifPresentOrElse(System.out::println,()->
+                System.out.println("No se encuentra el videojuego"));
 
 
 
