@@ -19,12 +19,13 @@ public class VideojuegoDAO implements DAO<Videojuego> {
 
     @Override
     public Optional<Videojuego> save(Videojuego videojuego) {
+        String sql = "INSERT INTO videojuegos (nombre, desarrollador, anio_lanzamiento,genero,plataforma) VALUES (?,?,?,?,?)";
 
-        try (Connection connection = ds.getConnection()) {
+        try (Connection connection = ds.getConnection();
+             PreparedStatement stmt = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)
+        ) {
 
-            String sql = "INSERT INTO videojuegos (nombre, desarrollador, anio_lanzamiento,genero,plataforma) VALUES (?,?,?,?,?)";
 
-            PreparedStatement stmt = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
             stmt.setString(1, videojuego.getNombre());
             stmt.setString(2, videojuego.getDesarrollador());
             stmt.setInt(3,videojuego.getAnio());
@@ -49,11 +50,11 @@ public class VideojuegoDAO implements DAO<Videojuego> {
 
     @Override
     public Optional<Videojuego> update(Videojuego videojuego) {
-        try (Connection connection = ds.getConnection()) {
+        String sql = "UPDATE videojuegos SET nombre = ?, desarrollador = ?, anio_lanzamiento = ?, genero = ?, plataforma = ?  WHERE id = ?";
 
-            String sql = "UPDATE videojuegos SET nombre = ?, desarrollador = ?, anio_lanzamiento = ?, genero = ?, plataforma = ?  WHERE id = ?";
-
-            PreparedStatement stmt = connection.prepareStatement(sql);
+        try (Connection connection = ds.getConnection();
+             PreparedStatement stmt = connection.prepareStatement(sql);
+        ) {
             stmt.setString(1, videojuego.getNombre());
             stmt.setString(2, videojuego.getDesarrollador());
             stmt.setInt(3,videojuego.getAnio());
