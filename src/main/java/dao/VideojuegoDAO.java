@@ -150,5 +150,32 @@ public class VideojuegoDAO implements DAO<Videojuego> {
     }
 
 
+    public Optional<Videojuego> saveOrUpdate(Videojuego videojuego) {
+
+        if (exists(videojuego)) {
+            return update(videojuego);
+        }
+        else  {
+            return save(videojuego);
+        }
+    }
+
+    public Boolean exists(Videojuego videojuego) {
+        return findById(videojuego.getId()).isPresent();
+    }
+
+    public Optional<Videojuego> deleteById(Integer id) {
+        var juego = findById(id);
+
+        if (juego.isPresent()) {
+            return delete(juego.get());
+        }
+        else  {
+            return Optional.empty();
+        }
+    }
+
+
+
 
 }
