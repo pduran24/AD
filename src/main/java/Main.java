@@ -1,5 +1,6 @@
 import dao.VideojuegoDAO;
 import database.DataProvider;
+import dao.DAO;
 import models.Videojuego;
 
 public class Main {
@@ -26,5 +27,21 @@ public class Main {
         } else  {
             System.out.println("No existe el videojuego");
         }
+
+
+        Videojuego juego7 = videojuegoDAO.findById(7).get();
+        juego7.setNombre("Editado");
+
+        videojuegoDAO.update(juego7).ifPresentOrElse(
+                System.out::println,()-> {
+                    System.out.println("No existe el videojuego");
+                }
+        );
+
+        videojuegoDAO.findById(7).ifPresentOrElse(videojuego -> {
+            videojuego.setNombre("Editado2");
+            videojuegoDAO.update(videojuego).ifPresent(System.out::println);
+        }, () ->  System.out.println("No existe el videojuego")
+        );
     }
 }
