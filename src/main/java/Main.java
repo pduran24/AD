@@ -47,9 +47,7 @@ public class Main {
         );
 
 
-
-
-
-
+        videojuegoDAO.findByNombre("God of War").ifPresentOrElse(System.out::println,()->
+                System.out.println("No existe el videojuego"));
     }
 }

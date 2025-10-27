@@ -175,7 +175,35 @@ public class VideojuegoDAO implements DAO<Videojuego> {
         }
     }
 
+    public Optional<Videojuego> findByNombre(String nombre) {
 
+        String sql = "SELECT * FROM videojuegos WHERE nombre = ?";
+
+        try (Connection connection = ds.getConnection();
+             PreparedStatement stmt = connection.prepareStatement(sql))
+        {
+            stmt.setString(1, nombre);
+
+            ResultSet rs = stmt.executeQuery();
+
+            if (rs.next()) {
+                Videojuego videojuego = new Videojuego();
+                videojuego.setId(rs.getInt("id"));
+                videojuego.setNombre(rs.getString("nombre"));
+                videojuego.setDesarrollador(rs.getString("desarrollador"));
+                videojuego.setAnio(rs.getInt("anio_lanzamiento"));
+                videojuego.setGenero(rs.getString("genero"));
+                videojuego.setPlataforma(rs.getString("plataforma"));
+
+                return Optional.of(videojuego);
+            }
+
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+
+        return Optional.empty();
+    }
 
 
 }
